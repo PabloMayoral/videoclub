@@ -6,6 +6,14 @@
 package codigo;
 
 import static java.lang.Integer.parseInt;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.apache.commons.dbcp2.BasicDataSource;
 
 /**
  *
@@ -13,6 +21,10 @@ import static java.lang.Integer.parseInt;
  */
 public class interfaz extends javax.swing.JFrame {
 conexion gestor = new conexion();
+   Statement sta;
+    Connection conexion;
+    BasicDataSource bdSource = new BasicDataSource();
+    ResultSet resultadoConsulta;
     /**
      * Creates new form interfaz
      */
@@ -31,7 +43,6 @@ conexion gestor = new conexion();
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        mostrarCancion_box = new javax.swing.JComboBox<>();
         jPanel3 = new javax.swing.JPanel();
         jLabel7 = new javax.swing.JLabel();
         release_actualizar = new javax.swing.JTextField();
@@ -85,10 +96,11 @@ conexion gestor = new conexion();
         jLabel22 = new javax.swing.JLabel();
         Actualizar_box_director = new javax.swing.JComboBox<>();
         actualizaDirectores = new javax.swing.JButton();
+        mostrarActor_box1 = new javax.swing.JComboBox<>();
+        Mostrar_actor = new javax.swing.JButton();
         closeConection = new javax.swing.JButton();
         openConection = new javax.swing.JButton();
         mensaje = new javax.swing.JLabel();
-        Mostrar_cancion = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
         jPanel4 = new javax.swing.JPanel();
@@ -115,16 +127,10 @@ conexion gestor = new conexion();
         jLabel31 = new javax.swing.JLabel();
         Actualizar_box_actor = new javax.swing.JComboBox<>();
         actualiza_actor = new javax.swing.JButton();
+        mostrarCancion_box = new javax.swing.JComboBox<>();
+        Mostrar_pelis = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-
-        mostrarCancion_box.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        mostrarCancion_box.setName(""); // NOI18N
-        mostrarCancion_box.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mostrarCancion_boxActionPerformed(evt);
-            }
-        });
 
         jPanel3.setBackground(new java.awt.Color(102, 102, 102));
 
@@ -295,7 +301,7 @@ conexion gestor = new conexion();
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(delete_film, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(deleteBox, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(75, Short.MAX_VALUE))
         );
 
         Actualizar_box.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
@@ -305,7 +311,7 @@ conexion gestor = new conexion();
             }
         });
 
-        jButton2.setText("Actualizar canción");
+        jButton2.setText("Actualizar pelicula");
         jButton2.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -339,13 +345,15 @@ conexion gestor = new conexion();
                                     .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                         .addComponent(nombre_actualizar, javax.swing.GroupLayout.DEFAULT_SIZE, 98, Short.MAX_VALUE)
                                         .addComponent(release_actualizar))))
-                            .addComponent(seleccionaDirectorBox_modificar, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(seleccionaDirectorBox_modificar, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addComponent(Actualizar_box, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
@@ -378,8 +386,8 @@ conexion gestor = new conexion();
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(seleccionaDirectorBox_modificar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(85, Short.MAX_VALUE))
+                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         jPanel1.setBackground(new java.awt.Color(102, 102, 102));
@@ -470,6 +478,22 @@ conexion gestor = new conexion();
             }
         });
 
+        mostrarActor_box1.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        mostrarActor_box1.setName(""); // NOI18N
+        mostrarActor_box1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mostrarActor_box1ActionPerformed(evt);
+            }
+        });
+
+        Mostrar_actor.setText("Mostrar actores");
+        Mostrar_actor.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        Mostrar_actor.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                Mostrar_actorActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -479,6 +503,10 @@ conexion gestor = new conexion();
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(añadir_director, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jLabel15, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(Actualizar_box_director, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(actualizaDirectores, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -517,12 +545,12 @@ conexion gestor = new conexion();
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(jLabel22)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(L_nacimiento1, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(Actualizar_box_director, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(actualizaDirectores, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                .addComponent(L_nacimiento1, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(mostrarActor_box1, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(Mostrar_actor, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -574,6 +602,10 @@ conexion gestor = new conexion();
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(delete_director, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(deleteDirectorBox, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(43, 43, 43)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(Mostrar_actor, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(mostrarActor_box1, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -594,14 +626,6 @@ conexion gestor = new conexion();
         });
 
         mensaje.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
-
-        Mostrar_cancion.setText("Mostrar canción");
-        Mostrar_cancion.setBorder(javax.swing.BorderFactory.createEtchedBorder());
-        Mostrar_cancion.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                Mostrar_cancionActionPerformed(evt);
-            }
-        });
 
         jTextArea1.setColumns(20);
         jTextArea1.setRows(5);
@@ -802,34 +826,50 @@ conexion gestor = new conexion();
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
+        mostrarCancion_box.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        mostrarCancion_box.setName(""); // NOI18N
+        mostrarCancion_box.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mostrarCancion_boxActionPerformed(evt);
+            }
+        });
+
+        Mostrar_pelis.setText("Mostrar peliculas");
+        Mostrar_pelis.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        Mostrar_pelis.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                Mostrar_pelisActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(openConection, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(10, 10, 10)
-                        .addComponent(closeConection)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(mensaje, javax.swing.GroupLayout.PREFERRED_SIZE, 425, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 339, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(openConection, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(10, 10, 10)
+                        .addComponent(closeConection)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(mensaje, javax.swing.GroupLayout.PREFERRED_SIZE, 821, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(mostrarCancion_box, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(Mostrar_cancion, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(Mostrar_pelis, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(78, 78, 78))
         );
         layout.setVerticalGroup(
@@ -843,18 +883,18 @@ conexion gestor = new conexion();
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                 .addComponent(closeConection, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addComponent(openConection, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(Mostrar_cancion, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(mostrarCancion_box, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(Mostrar_pelis, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(mostrarCancion_box, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 588, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(jPanel4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(118, 118, 118))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 588, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addComponent(jPanel4, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jPanel3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addContainerGap(128, Short.MAX_VALUE))
         );
 
         pack();
@@ -873,11 +913,23 @@ conexion gestor = new conexion();
     }//GEN-LAST:event_Actualizar_boxActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        //este boton tiene la funcion de actualizar una cancion, coge el album
-        //al que pertenece la cancion en el comboBox, y el nombre y la duracion en segundos que introduce el usuario
-         gestor.actualizaPelis(Actualizar_box.getSelectedItem().toString(), nombre_actualizar.getText(),t_genero1.getText() , seleccionaDirectorBox_modificar.getSelectedIndex(), seleccionaActorBox_actualizar.getSelectedIndex(),release_actualizar.getText());
-        limpiaCajas();
-        reseteaValoresBox();
+        //este boton tiene la funcion de actualizar una pelicula, coge el titulo de la peli
+       // en el comboBox, y el resto de valores lo introduce el ususario introduce el usuario
+       
+        String fecha_actualizar = release_actualizar.getText();
+        if(fecha_actualizar.length() == 9){  
+            if(fecha_actualizar.charAt(4) == '-' && fecha_actualizar.charAt(7) == '-'){
+                     gestor.actualizaPelis(Actualizar_box.getSelectedItem().toString(), nombre_actualizar.getText(),t_genero1.getText() , seleccionaDirectorBox_modificar.getSelectedIndex(), seleccionaActorBox_actualizar.getSelectedIndex(),release_actualizar.getText());
+                     limpiaCajas();
+                     reseteaValoresBox();
+            }
+            else{
+                mensaje.setText("No se ha podido actualizar la pelicula, debido a un fallo en el valor introducido en la fecha, recuerde que debe ser con esta estructura(2021-02-26)");
+            }
+          }
+      else{
+           mensaje.setText("No se ha podido actualizar la pelicula, debido a un fallo en el valor introducido en la fecha, recuerde que debe ser con esta estructura(2021-02-26)");
+      }
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void deleteBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteBoxActionPerformed
@@ -889,20 +941,33 @@ conexion gestor = new conexion();
     }//GEN-LAST:event_seleccionaDirectorBoxActionPerformed
 
     private void add_filmActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_add_filmActionPerformed
-        //este boton añade una nueva cancion, existe un comboBox que muestra los albumes y debemos seleccionar uno para poder introducir
-        //la cancion dentro del album correspondiente, ademas coge lo introducido por el usuario como el nombre y la duracion de la cancion
+        //este boton añade una nueva pelicula, existe un comboBox que muestra los actores y directores y debemos seleccionar uno de cada para poder introducir
+        //la pelicula dentro de la bbdd, ademas coge lo introducido por el usuario como el nombre fecha de lanzamiento y genero
+         String fecha = release.getText();
+     
+      if(fecha.length() == 9){  
+      if(fecha.charAt(4) == '-' && fecha.charAt(7) == '-'){
         gestor.insertarPelicula(this.titulo_text1.getText(), this.t_genero.getText(),this.seleccionaDirectorBox.getSelectedIndex(),this.seleccionaActorBox.getSelectedIndex(),this.release.getText());
         limpiaCajas();
         reseteaValoresBox();
+            mensaje.setText("");
+      }
+      else {
+         mensaje.setText("No se ha podido actualizar la pelicula, debido a un fallo en el valor introducido en la fecha, recuerde que debe ser con esta estructura(2021-02-26)");
+      }
+      }
+      else{
+           mensaje.setText("No se ha podido actualizar la pelicula, debido a un fallo en el valor introducido en la fecha, recuerde que debe ser con esta estructura(2021-02-26)");
+      }
 
     }//GEN-LAST:event_add_filmActionPerformed
 
     private void añadir_directorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_añadir_directorActionPerformed
-        //este boton lo que hace es que una vez el usuario introduce titulo, un autor y una fecha de lanzamiento del album
-        //se introduzca dentro de la base de datos y se cree un nuevo album
-       gestor.insertarDirector(this.nombre_Director.getText(), this.apellidoDirector1.getText(), this.apellidoDirector2.getText(),L_nacimiento.getText());
-        limpiaCajas();
-        reseteaValoresBox();
+        //este boton lo que hace es que una vez el usuario introduce titulo, un autor y una fecha de lanzamiento 
+        //se introduzca dentro de la base de datos
+          gestor.insertarDirector(this.nombre_Director.getText(), this.apellidoDirector1.getText(), this.apellidoDirector2.getText(),L_nacimiento.getText());
+          limpiaCajas();
+          reseteaValoresBox();
     }//GEN-LAST:event_añadir_directorActionPerformed
 
     private void closeConectionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_closeConectionActionPerformed
@@ -933,19 +998,12 @@ conexion gestor = new conexion();
     }//GEN-LAST:event_openConectionActionPerformed
 
     private void delete_filmActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_delete_filmActionPerformed
-        //este boton permite borrar cualquier cancion, simplemente hay que
-        //seleccionar la cancion del comboBox
+        //este boton permite borrar cualquier pelicula, simplemente hay que
+        //seleccionar la pelicula del comboBox
         gestor.deleteFilm(deleteBox.getSelectedItem().toString());
         reseteaValoresBox();
         limpiaCajas();
     }//GEN-LAST:event_delete_filmActionPerformed
-
-    private void Mostrar_cancionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Mostrar_cancionActionPerformed
-        // Este boton muestra las canciones de cada album, previamente hay que seleccionar
-        //el album del comboBox para mostrar las canciones
-        System.out.println(mostrarCancion_box.getSelectedItem().toString());
-       // jTextArea1.setText(gestor.muestraCanciones(mostrarCancion_box.getSelectedItem().toString()));
-    }//GEN-LAST:event_Mostrar_cancionActionPerformed
 
     private void seleccionaActorBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_seleccionaActorBoxActionPerformed
         // TODO add your handling code here:
@@ -956,6 +1014,7 @@ conexion gestor = new conexion();
     }//GEN-LAST:event_seleccionaDirectorBox_modificarActionPerformed
 
     private void delete_directorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_delete_directorActionPerformed
+      //Este metodo borra el director que se haya seleccionado en el comboBox 
         gestor.deleteDirector(deleteDirectorBox.getSelectedItem().toString());
         reseteaValoresBox();
         limpiaCajas();
@@ -970,19 +1029,22 @@ conexion gestor = new conexion();
     }//GEN-LAST:event_Actualizar_box_directorActionPerformed
 
     private void actualizaDirectoresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_actualizaDirectoresActionPerformed
-         gestor.actualizaDirectores( Actualizar_box_director.getSelectedItem().toString(),nombre_Director1.getText(),apellidoDirector3.getText() , apellidoDirector4.getText(),L_nacimiento1.getText());
+        //Este metodo actualiza los datos de la BBDD de la tabla directores, se ha de introducir los valores a modificar      
+        gestor.actualizaDirectores( Actualizar_box_director.getSelectedItem().toString(),nombre_Director1.getText(),apellidoDirector3.getText() , apellidoDirector4.getText(),L_nacimiento1.getText());
         limpiaCajas();
         reseteaValoresBox();
     }//GEN-LAST:event_actualizaDirectoresActionPerformed
 
     private void añadir_actorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_añadir_actorActionPerformed
-         gestor.insertarActor(this.nombre_Director.getText(), this.apellidoDirector1.getText(), this.apellidoDirector2.getText(),L_nacimiento.getText());
+        //Este metodo añade un director nuevo con sus valores correspondientes
+        gestor.insertarActor(this.nombre_Director.getText(), this.apellidoDirector1.getText(), this.apellidoDirector2.getText(),L_nacimiento.getText());
         limpiaCajas();
         reseteaValoresBox();
     }//GEN-LAST:event_añadir_actorActionPerformed
 
     private void delete_ActorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_delete_ActorActionPerformed
-         gestor.deleteActor(deleteActorBox.getSelectedItem().toString());
+        //Este metodo borra por completo el actor seleccionado
+        gestor.deleteActor(deleteActorBox.getSelectedItem().toString());
         reseteaValoresBox();
         limpiaCajas();
     }//GEN-LAST:event_delete_ActorActionPerformed
@@ -996,14 +1058,30 @@ conexion gestor = new conexion();
     }//GEN-LAST:event_Actualizar_box_actorActionPerformed
 
     private void actualiza_actorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_actualiza_actorActionPerformed
+      //Este metodo actualiza los atributos de los actores 
         gestor.actualizaActores(Actualizar_box_actor.getSelectedItem().toString(),nombre_Director1.getText(),apellidoDirector3.getText() , apellidoDirector4.getText(),L_nacimiento1.getText());
         limpiaCajas();
         reseteaValoresBox();
     }//GEN-LAST:event_actualiza_actorActionPerformed
+
+    private void Mostrar_pelisActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Mostrar_pelisActionPerformed
+        // Este boton muestra las canciones de cada album, previamente hay que seleccionar
+        //el album del comboBox para mostrar las canciones
+        System.out.println(mostrarCancion_box.getSelectedItem().toString());
+        jTextArea1.setText(gestor.muestraPelis(mostrarCancion_box.getSelectedItem().toString()));
+    }//GEN-LAST:event_Mostrar_pelisActionPerformed
+
+    private void mostrarActor_box1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mostrarActor_box1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_mostrarActor_box1ActionPerformed
+
+    private void Mostrar_actorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Mostrar_actorActionPerformed
+       jTextArea1.setText(gestor.consulta_actores(mostrarActor_box1.getSelectedItem().toString()));
+    }//GEN-LAST:event_Mostrar_actorActionPerformed
  public void reseteaValoresBox() {
            //En este metodo el objetivo es añadir un item en blanco, que sera el
            //item inicial, dandole un toque estetico, a parte busca tambien implementar
-           //dentro del comboBox todas las canciones o todos los album dependiendo 
+           //dentro del comboBox todas las peliculas, directores o actores dependiendo 
            //del comboBox que se deba usar, despues se usa el remove item para 
            //una vez se añada, borre o modifique un album/cancion el cambio se muestre 
            //dentro del comboBox y sin que se repita.
@@ -1014,31 +1092,46 @@ conexion gestor = new conexion();
         seleccionaActorBox.removeAllItems();
         seleccionaDirectorBox_modificar.removeAllItems();
         seleccionaActorBox_actualizar.removeAllItems();
+        mostrarCancion_box.removeAllItems();
+        Actualizar_box_director.removeAllItems();
+        deleteDirectorBox.removeAllItems();
+        deleteActorBox.removeAllItems();
+        Actualizar_box_actor.removeAllItems();
+        mostrarActor_box1.removeAllItems();
+        mostrarActor_box1.addItem("");
+        Actualizar_box_director.addItem("");
+        deleteDirectorBox.addItem("");
+        deleteActorBox.addItem("");
+        Actualizar_box_actor.addItem("");
         mostrarCancion_box.addItem("");
         Actualizar_box.addItem("");
         deleteBox.addItem("");
         seleccionaDirectorBox.addItem("");
-         seleccionaActorBox.addItem("");
+        seleccionaActorBox.addItem("");
         seleccionaActorBox_actualizar.addItem("");
         seleccionaDirectorBox_modificar.addItem("");
+        mostrarCancion_box.addItem("");
        // estos bucles sirven para meter en los comboBox los albumes o las canciones 
         for (int i = 0; i < gestor.consulta_actores().size(); i++) {
-            mostrarCancion_box.addItem(gestor.consulta_actores().get(i));
+//            mostrarCancion_box.addItem(gestor.consulta_actores().get(i));
             seleccionaActorBox.addItem(gestor.consulta_actores().get(i));
            seleccionaActorBox_actualizar.addItem(gestor.consulta_actores().get(i));
            deleteActorBox.addItem(gestor.consulta_actores().get(i));
            Actualizar_box_actor.addItem(gestor.consulta_actores().get(i));
-
+            mostrarActor_box1.addItem(gestor.consulta_actores().get(i));
        }
         for (int i = 0; i < gestor.consulta_peliculas().size(); i++) {
             Actualizar_box.addItem(gestor.consulta_peliculas().get(i));
             deleteBox.addItem(gestor.consulta_peliculas().get(i));
+            mostrarCancion_box.addItem(gestor.consulta_peliculas().get(i));
         }
         for (int i = 0; i < gestor.consulta_directores().size(); i++) {
             seleccionaDirectorBox.addItem(gestor.consulta_directores().get(i));
             seleccionaDirectorBox_modificar.addItem(gestor.consulta_directores().get(i));
           Actualizar_box_director.addItem(gestor.consulta_directores().get(i));
+          deleteDirectorBox.addItem(gestor.consulta_directores().get(i));
         }
+      
     }
    public void limpiaCajas(){
            //este metodo es de lo mas sencillo, lo unico que hace es vaciar de 
@@ -1052,6 +1145,8 @@ conexion gestor = new conexion();
            release_actualizar.setText("");
            nombre_actualizar.setText("");
        }
+   
+ 
     /**
      * @param args the command line arguments
      */
@@ -1093,7 +1188,8 @@ conexion gestor = new conexion();
     private javax.swing.JComboBox<String> Actualizar_box_director;
     private javax.swing.JTextField L_nacimiento;
     private javax.swing.JTextField L_nacimiento1;
-    private javax.swing.JButton Mostrar_cancion;
+    private javax.swing.JButton Mostrar_actor;
+    private javax.swing.JButton Mostrar_pelis;
     private javax.swing.JButton actualizaDirectores;
     private javax.swing.JButton actualiza_actor;
     private javax.swing.JButton add_film;
@@ -1156,6 +1252,7 @@ conexion gestor = new conexion();
     private javax.swing.JTextArea jTextArea1;
     private javax.swing.JLabel label;
     private javax.swing.JLabel mensaje;
+    private javax.swing.JComboBox<String> mostrarActor_box1;
     private javax.swing.JComboBox<String> mostrarCancion_box;
     private javax.swing.JTextField nombre_Director;
     private javax.swing.JTextField nombre_Director1;
